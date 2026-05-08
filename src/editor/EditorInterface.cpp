@@ -121,7 +121,8 @@ void EditorInterface::prepareForStreamingResponse(HWND editor, const std::string
         ::SendMessage(editor, SCI_SETSEL, selEnd, selEnd);
 
         // Add appropriate spacing after the question
-        std::string spacing = (responseType == L"ollama") ? "\n" : "\n\n";
+		std::string eolString = getNewlineString(editor); // Get Scintilla line ending style to determine appropriate spacing
+        std::string spacing   = (responseType == L"ollama") ? eolString : eolString + eolString; // TODO: does it needed here?
         ::SendMessage(editor, SCI_REPLACESEL, 0, reinterpret_cast<LPARAM>(spacing.c_str()));
     }
     else
@@ -134,4 +135,28 @@ void EditorInterface::prepareForStreamingResponse(HWND editor, const std::string
         // Position cursor at the start of where the selection was
         ::SendMessage(editor, SCI_SETSEL, selStart, selStart);
     }
+}
+
+/*
+ * Get the current line ending style of the Scintilla editor and return the appropriate newline string
+ * 
+ * @param editor Handle to the Scintilla editor
+ * @return The newline string corresponding to the editor's EOL mode
+ */
+std::string EditorInterface::getNewlineString(HWND editor)
+{
+    std::string newline;
+    switch (::SendMessage(editor, SCI_GETEOLMODE, 0, 0)) // EOL Mode: 0 = CRLF, 1 = LF, 2 = CR
+    {
+        case SC_EOL_CRLF:
+            newline = "\r\n"; // Windows style
+            break;
+        case SC_EOL_CR:
+            newline = "\r"; // Old Mac style
+            break;
+		default: // SC_EOL_LF or unknown (default to LF)
+            newline = "\n"; // Unix/Linux style
+            break;
+    }
+	return newline;
 }

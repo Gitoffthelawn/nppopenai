@@ -53,7 +53,7 @@ FuncItem funcItem[nbFunc];
 NppData nppData;
 
 // Debug mode flag for detailed logging
-bool debugMode = true; // Temporarily enabled for streaming debug
+bool debugMode = false; // Toggle from menu or config to enable/disable debug logging
 
 // Configuration variables for OpenAI API
 std::wstring configAPIValue_secretKey = TEXT("ENTER_YOUR_OPENAI_API_KEY_HERE"); // API key

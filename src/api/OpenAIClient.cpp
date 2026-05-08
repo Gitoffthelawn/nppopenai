@@ -348,14 +348,15 @@ namespace OpenAIClientImpl
                     ::SendMessage(curScintilla, SCI_SETSEL, selEnd, selEnd);
 
                     // Add appropriate spacing and the response after the question
+                    std::string eolString = EditorInterface::getNewlineString(curScintilla); // Get Scintilla line ending style to determine appropriate spacing
                     std::string responseText;
                     if (configAPIValue_responseType == L"ollama")
                     {
-                        responseText = "\n" + extractedContent;
+                        responseText = eolString + extractedContent;
                     }
                     else
                     {
-                        responseText = "\n\n" + extractedContent;
+                        responseText = eolString + eolString + extractedContent;
                     }
 
                     // Insert the response after the question
