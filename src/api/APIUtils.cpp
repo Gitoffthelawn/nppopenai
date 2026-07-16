@@ -10,7 +10,7 @@
  * @param baseUrl The base URL of the API
  * @param chatRoute The specific endpoint for chat completions
  * @return The complete URL for the API request
- */
+ * /
 std::string APIUtils::buildApiUrl(const std::string &baseUrl, const std::string &chatRoute)
 {
     std::string url = baseUrl;
@@ -48,6 +48,7 @@ std::string APIUtils::buildApiUrl(const std::string &baseUrl, const std::string 
 
     return url;
 }
+// */
 
 /**
  * Get the system prompt from configuration or prompt file

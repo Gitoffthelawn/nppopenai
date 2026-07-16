@@ -175,8 +175,7 @@ Add the following to your `NppOpenAI.ini` file:
 ```ini
 [API]
 secret_key=YOUR_API_KEY
-api_url=https://api.yourapi.com/v1/
-route_chat_completions=completion
+api_url=https://api.yourapi.com/v1/chat/completions
 response_type=newapi
 model=your-model-name
 ```
@@ -196,8 +195,7 @@ Add your API to the examples in README.md:
 
 ```ini
 # YourAPI Example
-api_url=https://api.yourapi.com/v1/
-route_chat_completions=completion
+api_url=https://api.yourapi.com/v1/chat/completions
 response_type=newapi
 ````
 

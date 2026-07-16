@@ -1,6 +1,6 @@
 #include "EditorInterface.h"
 #include "core/external_globals.h"
-#include "EncodingUtils.h"
+// #include "EncodingUtils.h"
 
 /**
  * Get the handle to the current Scintilla editor

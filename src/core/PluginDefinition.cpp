@@ -57,8 +57,8 @@ bool debugMode = false; // Toggle from menu or config to enable/disable debug lo
 
 // Configuration variables for OpenAI API
 std::wstring configAPIValue_secretKey = TEXT("ENTER_YOUR_OPENAI_API_KEY_HERE"); // API key
-std::wstring configAPIValue_baseURL = TEXT("https://api.openai.com/v1/");		// API base URL
-std::wstring configAPIValue_chatRoute = TEXT("chat/completions");				// Chat completions route path
+std::wstring configAPIValue_apiURL = TEXT("https://api.openai.com/v1/chat/completions"); // API URL (default to OpenAI's endpoint)
+// std::wstring configAPIValue_chatRoute = TEXT("chat/completions");				// Chat completions route path (DEPRECATED)
 std::wstring configAPIValue_responseType = TEXT("openai");						// Response format type
 std::wstring configAPIValue_proxyURL = TEXT("0");								// Proxy URL (0 = no proxy)
 std::wstring configAPIValue_model = TEXT("gpt-4o-mini");						// Default LLM model

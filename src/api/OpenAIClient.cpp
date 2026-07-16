@@ -265,9 +265,12 @@ namespace OpenAIClientImpl
              std::stof(toUTF8(configAPIValue_presencePenalty)), configAPIValue_keepAlive, streaming);
 
         // Build API URL with base URL and chat route
-        std::string baseUrl = toUTF8(configAPIValue_baseURL);
+        /* DEL!
+        std::string baseUrl = toUTF8(configAPIValue_apiURL);
         std::string chatRoute = toUTF8(configAPIValue_chatRoute);
         std::string url = APIUtils::buildApiUrl(baseUrl, chatRoute);
+        */
+        std::string url = toUTF8(configAPIValue_apiURL);
         std::string proxy = toUTF8(configAPIValue_proxyURL);
         std::string apiType = toUTF8(configAPIValue_responseType);
         std::string secretKey = toUTF8(configAPIValue_secretKey);

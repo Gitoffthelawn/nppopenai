@@ -30,36 +30,37 @@ void writeDefaultConfig()
     ::WritePrivateProfileString(TEXT("INFO"), TEXT("; Supports OpenAI, Claude, and Ollama API connections"), TEXT(""), iniFilePath);
     ::WritePrivateProfileString(TEXT("INFO"), TEXT("; Enter your API key below (OpenAI: sk-xxx, Claude: sk-ant-xxx, Ollama: blank)"), TEXT(""), iniFilePath);
 
-    // API configurations    ::WritePrivateProfileString(TEXT("INFO"), TEXT("; === OpenAI configuration ==="), TEXT(""), iniFilePath);
-    ::WritePrivateProfileString(TEXT("INFO"), TEXT("; api_url = https://api.openai.com/v1/"), TEXT(""), iniFilePath);
+    // API configurations
+    ::WritePrivateProfileString(TEXT("INFO"), TEXT("; === OpenAI configuration ==="), TEXT(""), iniFilePath);
+    ::WritePrivateProfileString(TEXT("INFO"), TEXT("; api_url = https://api.openai.com/v1/chat/completions"), TEXT(""), iniFilePath);
     ::WritePrivateProfileString(TEXT("INFO"), TEXT("; response_type = openai"), TEXT(""), iniFilePath);
-    ::WritePrivateProfileString(TEXT("INFO"), TEXT("; route_chat_completions = chat/completions  # New naming convention"), TEXT(""), iniFilePath);
-    ::WritePrivateProfileString(TEXT("INFO"), TEXT("; route_realtime_sessions = realtime/sessions  # Future support"), TEXT(""), iniFilePath);
-    ::WritePrivateProfileString(TEXT("INFO"), TEXT("; route_audio_speech = audio/speech  # Future support"), TEXT(""), iniFilePath);
-    ::WritePrivateProfileString(TEXT("INFO"), TEXT("; route_images_generations = images/generations  # Future support"), TEXT(""), iniFilePath);
+    // ::WritePrivateProfileString(TEXT("INFO"), TEXT("; route_chat_completions = chat/completions  # New naming convention"), TEXT(""), iniFilePath); // DEPRECATED
+    // ::WritePrivateProfileString(TEXT("INFO"), TEXT("; route_realtime_sessions = realtime/sessions  # Future support"), TEXT(""), iniFilePath);
+    // ::WritePrivateProfileString(TEXT("INFO"), TEXT("; route_audio_speech = audio/speech  # Future support"), TEXT(""), iniFilePath);
+    // ::WritePrivateProfileString(TEXT("INFO"), TEXT("; route_images_generations = images/generations  # Future support"), TEXT(""), iniFilePath);
     ::WritePrivateProfileString(TEXT("INFO"), TEXT("; model = gpt-4o-mini"), TEXT(""), iniFilePath);
     ::WritePrivateProfileString(TEXT("INFO"), TEXT("; streaming = 1 (enabled) or 0 (disabled)"), TEXT(""), iniFilePath);
     ::WritePrivateProfileString(TEXT("INFO"), TEXT("; show_reasoning = 1 (show AI reasoning sections) or 0 (hide reasoning)"), TEXT(""), iniFilePath);
     ::WritePrivateProfileString(TEXT("INFO"), TEXT("; "), TEXT(""), iniFilePath);
     ::WritePrivateProfileString(TEXT("INFO"), TEXT("; === Claude configuration ==="), TEXT(""), iniFilePath);
-    ::WritePrivateProfileString(TEXT("INFO"), TEXT("; api_url = https://api.anthropic.com/v1/"), TEXT(""), iniFilePath);
+    ::WritePrivateProfileString(TEXT("INFO"), TEXT("; api_url = https://api.anthropic.com/v1/messages"), TEXT(""), iniFilePath);
     ::WritePrivateProfileString(TEXT("INFO"), TEXT("; response_type = claude"), TEXT(""), iniFilePath);
-    ::WritePrivateProfileString(TEXT("INFO"), TEXT("; route_chat_completions = messages  # New naming convention"), TEXT(""), iniFilePath);
+    // ::WritePrivateProfileString(TEXT("INFO"), TEXT("; route_chat_completions = messages  # New naming convention"), TEXT(""), iniFilePath);
     ::WritePrivateProfileString(TEXT("INFO"), TEXT("; model = claude-3-haiku-20240307"), TEXT(""), iniFilePath);
     ::WritePrivateProfileString(TEXT("INFO"), TEXT("; streaming = 1 (enabled) or 0 (disabled)"), TEXT(""), iniFilePath);
     ::WritePrivateProfileString(TEXT("INFO"), TEXT("; show_reasoning = 1 (show AI reasoning sections) or 0 (hide reasoning)"), TEXT(""), iniFilePath);
     ::WritePrivateProfileString(TEXT("INFO"), TEXT("; "), TEXT(""), iniFilePath);
 
     ::WritePrivateProfileString(TEXT("INFO"), TEXT("; === Ollama configuration ==="), TEXT(""), iniFilePath);
-    ::WritePrivateProfileString(TEXT("INFO"), TEXT("; api_url = http://localhost:11434/"), TEXT(""), iniFilePath);
+    ::WritePrivateProfileString(TEXT("INFO"), TEXT("; api_url = http://localhost:11434/api/generate"), TEXT(""), iniFilePath);
     ::WritePrivateProfileString(TEXT("INFO"), TEXT("; response_type = ollama"), TEXT(""), iniFilePath);
-    ::WritePrivateProfileString(TEXT("INFO"), TEXT("; route_chat_completions = api/generate  # New naming convention"), TEXT(""), iniFilePath);
+    // ::WritePrivateProfileString(TEXT("INFO"), TEXT("; route_chat_completions = api/generate  # New naming convention"), TEXT(""), iniFilePath);
     ::WritePrivateProfileString(TEXT("INFO"), TEXT("; model = qwen3:1.7b"), TEXT(""), iniFilePath);
     ::WritePrivateProfileString(TEXT("INFO"), TEXT("; streaming = 1 (enabled) or 0 (disabled)"), TEXT(""), iniFilePath);
     ::WritePrivateProfileString(TEXT("INFO"), TEXT("; keep_alive = 5m (keep model in memory for 5 minutes after each request; set to -1 to keep indefinitely, 0 to unload immediately, or use suffixes like 10m for 10 minutes, 24h for 24 hours)"), TEXT(""), iniFilePath);
     ::WritePrivateProfileString(TEXT("API"), TEXT("secret_key"), TEXT("ENTER_YOUR_API_KEY_HERE"), iniFilePath);
-    ::WritePrivateProfileString(TEXT("API"), TEXT("api_url"), TEXT("https://api.openai.com/v1/"), iniFilePath); // New route naming convention (recommended)
-    ::WritePrivateProfileString(TEXT("API"), TEXT("route_chat_completions"), TEXT("chat/completions"), iniFilePath);
+    ::WritePrivateProfileString(TEXT("API"), TEXT("api_url"), TEXT("https://api.openai.com/v1/chat/completions"), iniFilePath); // New route naming convention (recommended)
+    // ::WritePrivateProfileString(TEXT("API"), TEXT("route_chat_completions"), TEXT("chat/completions"), iniFilePath);
     ::WritePrivateProfileString(TEXT("API"), TEXT("response_type"), TEXT("openai"), iniFilePath);
     ::WritePrivateProfileString(TEXT("API"), TEXT("model"), TEXT("gpt-4o-mini"), iniFilePath);
     ::WritePrivateProfileString(TEXT("API"), TEXT("temperature"), TEXT("0.7"), iniFilePath);
@@ -112,9 +113,9 @@ namespace ConfigManagerImpl
                          TEXT("NppOpenAI Configuration Error"),
                          MB_ICONWARNING);
         } // Read other API settings
-        ::GetPrivateProfileString(TEXT("API"), TEXT("api_url"), configAPIValue_baseURL.c_str(), buffer, 1024, iniFilePath);
-        configAPIValue_baseURL = buffer; // Auto-correct common OpenAI-compatible server URLs that are missing /v1
-        std::wstring baseUrlLower = configAPIValue_baseURL;
+        ::GetPrivateProfileString(TEXT("API"), TEXT("api_url"), configAPIValue_apiURL.c_str(), buffer, 1024, iniFilePath);
+        configAPIValue_apiURL = buffer; // Auto-correct common OpenAI-compatible server URLs that are missing /v1
+        std::wstring baseUrlLower = configAPIValue_apiURL;
         std::transform(baseUrlLower.begin(), baseUrlLower.end(), baseUrlLower.begin(),
                        [](wchar_t c)
                        { return static_cast<wchar_t>(::towlower(c)); });
@@ -130,6 +131,8 @@ namespace ConfigManagerImpl
             baseUrlLower.find(L"/v1") == std::wstring::npos &&
             baseUrlLower.find(L"11434") == std::wstring::npos); // Exclude Ollama default port
         */
+
+        /*
 		bool needsV1 = (baseUrlLower.find(L"/v1") == std::wstring::npos); // We only examine the '/v1' ending, as unexpected cases may occur (e.g. remote Ollama, using 127.0.0.1 instead of localhost, etc. etc.)
         if (needsV1)
         {
@@ -138,18 +141,18 @@ namespace ConfigManagerImpl
             if (getConfirmedTrailingV1[0] != '1')
             {
 				// Show confirmation dialog to user to update API URL
-                int result = ::MessageBox(nppData._nppHandle, (L"The “" + configAPIValue_baseURL + L"” API URL does not end with “/v1/”.\n\nDo you want to append it?\n(Recommended for remote access)").c_str(), L"NppOpenAI: Confirm", MB_YESNO | MB_ICONQUESTION);
+                int result = ::MessageBox(nppData._nppHandle, (L"The “" + configAPIValue_apiURL + L"” API URL does not end with “/v1/”.\n\nDo you want to append it?\n(Recommended for remote access)").c_str(), L"NppOpenAI: Confirm", MB_YESNO | MB_ICONQUESTION);
                 if (result == IDYES)
                 {
                     // Remove trailing slash if present
-                    if (!configAPIValue_baseURL.empty() && configAPIValue_baseURL.back() == L'/')
+                    if (!configAPIValue_apiURL.empty() && configAPIValue_apiURL.back() == L'/')
                     {
-                        configAPIValue_baseURL.pop_back();
+                        configAPIValue_apiURL.pop_back();
                     }
-                    configAPIValue_baseURL += L"/v1/";
+                    configAPIValue_apiURL += L"/v1/";
 
                     // Save confirmation and updated URL to INI file
-                    ::WritePrivateProfileString(TEXT("API"), TEXT("api_url"), configAPIValue_baseURL.c_str(), iniFilePath);
+                    ::WritePrivateProfileString(TEXT("API"), TEXT("api_url"), configAPIValue_apiURL.c_str(), iniFilePath);
 
                 }
                 ::WritePrivateProfileString(TEXT("PLUGIN"), TEXT("is_confirmed_trailing_v1"), TEXT("1"), iniFilePath); // Don't bother user again
@@ -160,21 +163,23 @@ namespace ConfigManagerImpl
             if (debugMode)
             {
                 ::MessageBox(nppData._nppHandle,
-                             (L"Auto-corrected API URL to include /v1: " + configAPIValue_baseURL).c_str(),
+                             (L"Auto-corrected API URL to include /v1: " + configAPIValue_apiURL).c_str(),
                              L"NppOpenAI Auto-Correction",
                              MB_ICONINFORMATION);
             }
-            */
+            * /
         }
         else
         {
             // Ensure trailing slash for baseURL
-            if (!configAPIValue_baseURL.empty() && configAPIValue_baseURL.back() != L'/')
+            if (!configAPIValue_apiURL.empty() && configAPIValue_apiURL.back() != L'/')
             {
-                configAPIValue_baseURL.push_back(L'/');
+                configAPIValue_apiURL.push_back(L'/');
             }
         } // Try new route naming convention first, then fall back to legacy
+        */
 
+        /* DEL!
         ::GetPrivateProfileString(TEXT("API"), TEXT("route_chat_completions"), L"", buffer, 1024, iniFilePath);
         if (wcslen(buffer) > 0)
         {
@@ -186,6 +191,7 @@ namespace ConfigManagerImpl
             ::GetPrivateProfileString(TEXT("API"), TEXT("chat_completions_route"), configAPIValue_chatRoute.c_str(), buffer, 1024, iniFilePath);
             configAPIValue_chatRoute = buffer;
         }
+        // */
 
         ::GetPrivateProfileString(TEXT("API"), TEXT("response_type"), configAPIValue_responseType.c_str(), buffer, 1024, iniFilePath);
         configAPIValue_responseType = buffer;

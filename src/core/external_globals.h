@@ -67,8 +67,8 @@ extern FuncItem funcItem[];                          // Array of plugin commands
 extern bool isKeepQuestion;                          // Flag for "keep question" option
 extern bool debugMode;                               // Flag for debug mode
 extern std::wstring configAPIValue_secretKey;        // API secret key (e.g., "sk-...")
-extern std::wstring configAPIValue_baseURL;          // Base URL for API requests (e.g., "https://api.openai.com/v1/")
-extern std::wstring configAPIValue_chatRoute;        // Chat completions route path (e.g., "chat/completions") - corresponds to route_chat_completions
+extern std::wstring configAPIValue_apiURL;          // Base URL for API requests (e.g., "https://api.openai.com/v1/chat/completions")
+// extern std::wstring configAPIValue_chatRoute;        // Chat completions route path (e.g., "chat/completions") - corresponds to route_chat_completions - DEPRECATED!
 extern std::wstring configAPIValue_responseType;     // Response format type (openai, ollama, claude, simple)
 extern std::wstring configAPIValue_proxyURL;         // Proxy URL for API requests (e.g., "http://proxy:8080" or "0" for none)
 extern std::wstring configAPIValue_model;            // Model name for API requests

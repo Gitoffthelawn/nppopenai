@@ -10,7 +10,7 @@
 namespace APIUtils
 {
     // Build API URL with proper endpoints
-    std::string buildApiUrl(const std::string &baseUrl, const std::string &chatRoute);
+    // std::string buildApiUrl(const std::string &baseUrl, const std::string &chatRoute);
 
     // Get system prompt from configuration or selected file
     std::wstring getSystemPrompt();

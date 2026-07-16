@@ -76,8 +76,7 @@ Edit your `NppOpenAI.ini` directly for maximum control:
 ```ini
 [API]
 secret_key=sk-...
-api_url=https://api.openai.com/v1/    # Base URL for API
-route_chat_completions=chat/completions  # Endpoint path
+api_url=https://api.openai.com/v1/chat/completions  # URL for API
 response_type=openai  # Response format (openai, ollama, simple)
 model=gpt-4o-mini
 temperature=0.7
@@ -93,8 +92,7 @@ Connect directly to any LLM API without intermediary adapters or proxies. The pl
 
 ```ini
 # Standard OpenAI API setup
-api_url=https://api.openai.com/v1/
-route_chat_completions=chat/completions
+api_url=https://api.openai.com/v1/chat/completions
 response_type=openai
 ```
 
@@ -109,35 +107,28 @@ response_type=openai
 
 ### 🔌 URL Configuration
 
-The plugin constructs API URLs by combining two parameters:
+The plugin uses the following configuration parameters to connect to your LLM backend (the `route_chat_completions` is deprecated in favor of `api_url`):
 
-1. `api_url` - The base URL of the AI service
-2. `route_chat_completions` - The specific endpoint path
-
-**Final URL = api_url + route_chat_completions**
+1. `api_url` - The URL of the AI service
 
 **Examples:**
 
 ```ini
 # OpenAI API (default)
-api_url=https://api.openai.com/v1/
-route_chat_completions=chat/completions
+api_url=https://api.openai.com/v1/chat/completions
 response_type=openai
 
 # Ollama with native API format
-api_url=http://localhost:11434/
-route_chat_completions=api/generate
+api_url=http://localhost:11434/api/generate
 response_type=ollama
 model=qwen3:1.7b
 
 # Anthropic Claude API
-api_url=https://api.anthropic.com/v1/
-route_chat_completions=messages
+api_url=https://api.anthropic.com/v1/messages
 response_type=claude
 
 # OpenAI-compatible server (like LiteLLM or vLLM)
-api_url=http://localhost:8000/
-route_chat_completions=v1/chat/completions
+api_url=http://localhost:8000/v1/chat/completions
 response_type=openai
 ```
 

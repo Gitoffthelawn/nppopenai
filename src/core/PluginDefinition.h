@@ -62,7 +62,7 @@ const int nbFunc = 11; // Increased from 10 to 11 to accommodate new "Toggle Deb
 #include "../config/ConfigManager.h"
 #include "../config/PromptManager.h"
 extern std::wstring configAPIValue_secretKey;
-extern std::wstring configAPIValue_baseURL;
+extern std::wstring configAPIValue_apiURL;
 extern std::wstring configAPIValue_proxyURL;
 
 // Debug mode flag
