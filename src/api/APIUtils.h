@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include "RequestFormatters.h"
 
 /**
  * APIUtils - A module for handling API-related utilities
@@ -16,16 +17,10 @@ namespace APIUtils
     std::wstring getSystemPrompt();
 
     // Create API request with all necessary parameters
+    // New signature groups optional parameters into RequestOptions
     std::string prepareApiRequest(
         const std::string &selectedText,
         const std::wstring &systemPrompt,
-        const std::wstring &model,
         const std::wstring &responseType,
-        float temperature,
-        int maxTokens,
-        float topP,
-        float frequencyPenalty,
-        float presencePenalty,
-        const std::wstring &keepAlive,
-        bool streaming);
+        const RequestFormatters::RequestOptions &options);
 }

@@ -11,73 +11,57 @@ using json = nlohmann::json;
 
 namespace RequestFormatters
 {
+    // Options structure to group request-related settings so formatters accept
+    // a single argument for optional parameters.
+    struct RequestOptions
+    {
+        std::wstring model;
+        float temperature = 1.0f;
+        int maxTokens = 0;
+        float topP = 1.0f;
+        float frequencyPenalty = 0.0f;
+        float presencePenalty = 0.0f;
+        std::wstring keepAlive; // e.g. "3600", "10m", "24h"
+        bool streaming = false;
+    };
     // Formatter function type definition
+    // New signature: prompt, systemPrompt, options
     using FormatterFunction = std::function<std::string(
-        const std::wstring& model,
         const std::wstring& prompt,
         const std::wstring& systemPrompt,
-        float temperature,
-        int maxTokens,
-        float topP,
-        float frequencyPenalty,
-        float presencePenalty,
-        const std::wstring& keepAlive)>; // keepAlive passed as string (e.g. "3600", "10m", "24h")
+        const RequestOptions& options)>;
 
     /**
      * Format request for standard OpenAI-compatible API
      */
     std::string formatOpenAIRequest(
-        const std::wstring& model,
         const std::wstring& prompt,
         const std::wstring& systemPrompt,
-        float temperature,
-        int maxTokens,
-        float topP,
-        float frequencyPenalty,
-        float presencePenalty,
-        const std::wstring& keepAlive);
+        const RequestOptions& options);
 
     /**
      * Format request for Ollama native API
      */
     std::string formatOllamaRequest(
-        const std::wstring& model,
         const std::wstring& prompt,
         const std::wstring& systemPrompt,
-        float temperature,
-        int maxTokens,
-        float topP,
-        float frequencyPenalty,
-        float presencePenalty,
-        const std::wstring& keepAlive);
+        const RequestOptions& options);
 
     /**
      * Format request for Anthropic Claude API
      */
     std::string formatClaudeRequest(
-        const std::wstring& model,
         const std::wstring& prompt,
         const std::wstring& systemPrompt,
-        float temperature,
-        int maxTokens,
-        float topP,
-        float frequencyPenalty,
-        float presencePenalty,
-        const std::wstring& keepAlive);
+        const RequestOptions& options);
 
     /**
      * Format request for simple completion API
      */
     std::string formatSimpleRequest(
-        const std::wstring& model,
         const std::wstring& prompt,
         const std::wstring& systemPrompt,
-        float temperature,
-        int maxTokens,
-        float topP,
-        float frequencyPenalty,
-        float presencePenalty,
-        const std::wstring& keepAlive);
+        const RequestOptions& options);
 
     /**
      * Get the appropriate formatter function for an endpoint

@@ -23,22 +23,16 @@
 namespace RequestFormatters
 {
     std::string formatOpenAIRequest(
-        const std::wstring& model,
         const std::wstring& prompt,
         const std::wstring& systemPrompt,
-        float temperature,
-        int maxTokens,
-        float topP,
-        float frequencyPenalty,
-        float presencePenalty,
-        const std::wstring& keepAlive)
+        const RequestOptions& options)
     {
-        (void)keepAlive; // Not used for OpenAI-compatible requests
+        // responseType not required by individual formatter
 
         json requestJson;
 
         // Convert wstring to UTF-8 string
-        std::string modelStr = toUTF8(model);
+        std::string modelStr = toUTF8(options.model);
         std::string promptStr = toUTF8(prompt);
         std::string systemPromptStr = toUTF8(systemPrompt);
 
@@ -62,53 +56,47 @@ namespace RequestFormatters
         requestJson["messages"] = messagesArray;
 
         // Add parameters if they have non-default values
-        if (temperature != 1.0f)
+        if (options.temperature != 1.0f)
         {
-            requestJson["temperature"] = temperature;
+            requestJson["temperature"] = options.temperature;
         }
 
-        if (maxTokens > 0)
+        if (options.maxTokens > 0)
         {
-            std::string maxTokensKey = toUTF8(model).substr(0, 6) == "gpt-5" ? "max_completion_tokens" : "max_tokens";
-            requestJson[maxTokensKey] = maxTokens;
+            std::string maxTokensKey = toUTF8(options.model).substr(0, 6) == "gpt-5" ? "max_completion_tokens" : "max_tokens";
+            requestJson[maxTokensKey] = options.maxTokens;
         }
 
-        if (topP != 1.0f)
+        if (options.topP != 1.0f)
         {
-            requestJson["top_p"] = topP;
+            requestJson["top_p"] = options.topP;
         }
 
-        if (frequencyPenalty != 0.0f)
+        if (options.frequencyPenalty != 0.0f)
         {
-            requestJson["frequency_penalty"] = frequencyPenalty;
+            requestJson["frequency_penalty"] = options.frequencyPenalty;
         }
 
-        if (presencePenalty != 0.0f)
+        if (options.presencePenalty != 0.0f)
         {
-            requestJson["presence_penalty"] = presencePenalty;
+            requestJson["presence_penalty"] = options.presencePenalty;
         }
 
         return requestJson.dump();
     }
 
     std::string formatOllamaRequest(
-        const std::wstring& model,
         const std::wstring& prompt,
         const std::wstring& systemPrompt,
-        float temperature,
-        int maxTokens,
-        float topP,
-        float frequencyPenalty,
-        float presencePenalty,
-        const std::wstring& keepAlive)
+        const RequestOptions& options)
     {
-        // Mark unused parameters to avoid compiler warnings
-        (void)presencePenalty; // Ollama doesn't use presence_penalty
+        // Ollama doesn't use presence_penalty
+        (void)options.presencePenalty;
 
         json requestJson;
 
         // Convert wstring to UTF-8 string
-        std::string modelStr = toUTF8(model);
+        std::string modelStr = toUTF8(options.model);
         std::string promptStr = toUTF8(prompt);
         std::string systemPromptStr = toUTF8(systemPrompt);
 
@@ -123,60 +111,52 @@ namespace RequestFormatters
         }
 
         // Ollama parameters (use only those that are supported)
-        if (temperature != 1.0f)
+        if (options.temperature != 1.0f)
         {
-            requestJson["temperature"] = temperature;
+            requestJson["temperature"] = options.temperature;
         }
 
         // Ollama uses num_predict instead of max_tokens
-        if (maxTokens > 0)
+        if (options.maxTokens > 0)
         {
-            requestJson["num_predict"] = maxTokens;
+            requestJson["num_predict"] = options.maxTokens;
         }
 
         // Ollama supports top_p
-        if (topP != 1.0f)
+        if (options.topP != 1.0f)
         {
-            requestJson["top_p"] = topP;
+            requestJson["top_p"] = options.topP;
         }
 
         // Ollama: optional keep_alive parameter (accepts seconds or suffixed strings like "10m", "24h")
-        if (!keepAlive.empty()) // NOK: && keepAlive != L"0" (Allow "0" to be passed to unload immediately)
+        if (!options.keepAlive.empty()) // NOK: && keepAlive != L"0" (Allow "0" to be passed to unload immediately)
         {
-            requestJson["keep_alive"] = toUTF8(keepAlive);
+            requestJson["keep_alive"] = toUTF8(options.keepAlive);
         }
 
         // Ollama doesn't support frequency_penalty and presence_penalty
         // but has optional frequency_penalty called repeat_penalty
-        if (frequencyPenalty != 0.0f)
+        if (options.frequencyPenalty != 0.0f)
         {
-            requestJson["repeat_penalty"] = 1.0f + frequencyPenalty; // Approximate conversion
+            requestJson["repeat_penalty"] = 1.0f + options.frequencyPenalty; // Approximate conversion
         }
 
         return requestJson.dump();
     }
 
     std::string formatClaudeRequest(
-        const std::wstring& model,
         const std::wstring& prompt,
         const std::wstring& systemPrompt,
-        float temperature,
-        int maxTokens,
-        float topP,
-        float frequencyPenalty,
-        float presencePenalty,
-        const std::wstring& keepAlive)
+        const RequestOptions& options)
     {
-        (void)keepAlive; // Not used for Claude request format
-
-        // Mark unused parameters to avoid compiler warnings
-        (void)frequencyPenalty; // Claude doesn't use frequency_penalty
-        (void)presencePenalty;  // Claude doesn't use presence_penalty
+        // Claude doesn't use frequency_penalty or presence_penalty
+        (void)options.frequencyPenalty;
+        (void)options.presencePenalty;
 
         json requestJson;
 
         // Convert wstring to UTF-8 string
-        std::string modelStr = toUTF8(model);
+        std::string modelStr = toUTF8(options.model);
         std::string promptStr = toUTF8(prompt);
         std::string systemPromptStr = toUTF8(systemPrompt);
 
@@ -199,47 +179,40 @@ namespace RequestFormatters
         }
 
         // Claude supports temperature
-        if (temperature != 1.0f)
+        if (options.temperature != 1.0f)
         {
-            requestJson["temperature"] = temperature;
+            requestJson["temperature"] = options.temperature;
         }
 
         // Claude uses max_tokens
-        if (maxTokens > 0)
+        if (options.maxTokens > 0)
         {
-            requestJson["max_tokens"] = maxTokens;
+            requestJson["max_tokens"] = options.maxTokens;
         }
 
         // Claude supports top_p
-        if (topP != 1.0f)
+        if (options.topP != 1.0f)
         {
-            requestJson["top_p"] = topP;
+            requestJson["top_p"] = options.topP;
         } // Claude doesn't support frequency_penalty and presence_penalty
 
         return requestJson.dump();
     }
 
     std::string formatSimpleRequest(
-        const std::wstring& model,
         const std::wstring& prompt,
         const std::wstring& systemPrompt,
-        float temperature,
-        int maxTokens,
-        float topP,
-        float frequencyPenalty,
-        float presencePenalty,
-        const std::wstring& keepAlive)
+        const RequestOptions& options)
     {
-        // Mark unused parameters to avoid compiler warnings
-        (void)keepAlive;        // Not used for simple format
-        (void)topP;             // Simple APIs typically don't use top_p
-        (void)frequencyPenalty; // Simple APIs typically don't use frequency_penalty
-        (void)presencePenalty;  // Simple APIs typically don't use presence_penalty
+        // Not used for simple format
+        (void)options.topP;
+        (void)options.frequencyPenalty;
+        (void)options.presencePenalty;
 
         json requestJson;
 
         // Convert wstring to UTF-8 string
-        std::string modelStr = toUTF8(model);
+        std::string modelStr = toUTF8(options.model);
         std::string promptStr = toUTF8(prompt);
         std::string systemPromptStr = toUTF8(systemPrompt);
 
@@ -254,14 +227,14 @@ namespace RequestFormatters
         }
 
         // Simple API typically supports basic parameters
-        if (temperature != 1.0f)
+        if (options.temperature != 1.0f)
         {
-            requestJson["temperature"] = temperature;
+            requestJson["temperature"] = options.temperature;
         }
 
-        if (maxTokens > 0)
+        if (options.maxTokens > 0)
         {
-            requestJson["max_tokens"] = maxTokens;
+            requestJson["max_tokens"] = options.maxTokens;
         }
 
         return requestJson.dump();

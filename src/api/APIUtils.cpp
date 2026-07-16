@@ -92,33 +92,20 @@ std::wstring APIUtils::getSystemPrompt()
 std::string APIUtils::prepareApiRequest(
     const std::string &selectedText,
     const std::wstring &systemPrompt,
-    const std::wstring &model,
     const std::wstring &responseType,
-    float temperature,
-    int maxTokens,
-    float topP,
-    float frequencyPenalty,
-    float presencePenalty,
-    const std::wstring &keepAlive,
-    bool streaming)
+    const RequestFormatters::RequestOptions &options)
 {
     // Get the appropriate request formatter based on the configured response type
     auto formatter = RequestFormatters::getFormatterForEndpoint(responseType);
 
     // Format request using the selected formatter
     std::string request = formatter(
-        model,
         multiByteToWideChar(selectedText.c_str()),
         systemPrompt,
-        temperature,
-        maxTokens,
-        topP,
-        frequencyPenalty,
-        presencePenalty,
-        keepAlive);
+        options);
 
     // Add streaming parameter if needed
-    if (streaming)
+    if (options.streaming)
     {
         auto pos = request.rfind('}');
         if (pos != std::string::npos)

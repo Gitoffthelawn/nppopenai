@@ -193,6 +193,12 @@ namespace ConfigManagerImpl
         }
         // */
 
+		// Remove trailing slash from `configAPIValue_apiURL` if present
+		if (!configAPIValue_apiURL.empty() && configAPIValue_apiURL.back() == L'/')
+		{
+			configAPIValue_apiURL.pop_back();
+		}
+
         ::GetPrivateProfileString(TEXT("API"), TEXT("response_type"), configAPIValue_responseType.c_str(), buffer, 1024, iniFilePath);
         configAPIValue_responseType = buffer;
 
